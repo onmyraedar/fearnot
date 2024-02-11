@@ -7,6 +7,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import FearScreen from './components/FearScreen';
 import SliderScreen from './components/SliderScreen';
 import BackgroundScreen from './components/BackgroundScreen';
+import PathScreen from './components/PathScreen';
 
 const ENDPOINT = '/api/image';
 const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
@@ -21,6 +22,8 @@ export default function Home() {
 
   const [fear, setFear] = React.useState('');
   const [screen, setScreen] = React.useState(1);
+
+  const [path, setPath] = React.useState('');
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -96,7 +99,10 @@ export default function Home() {
     try {
       const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
-      const prompt = `Generate a personalized response in the form of a paragraph about a fear that I state alongside a fear scale that ranges from 1 to 10. The response text should be split into two different paragraph. The first paragraph and the second paragraph length must each be below 150 words detailing the general background and justification of the specific fear while taking into account the fear scale. The second paragraph must have the title or heading "Solutions:" which details the potential coping mechanisms and solutions to the fear. It will be used to parse response text.
+      const prompt = `Generate a personalized response in the form of a paragraph about a fear that I state alongside a fear scale that ranges from 1 to 10. 
+      The response text should be split into two different paragraph. 
+      The first paragraph and the second paragraph length must each be below 150 words detailing the general background and justification of the specific fear while taking into account the fear scale. 
+      The second paragraph must have the title or heading "Solutions:" which details comforting facts about the fear. It will be used to parse response text.
 
       Paragraph format should be as follows
       
@@ -111,12 +117,26 @@ export default function Home() {
       const result = await model.generateContent(prompt);
       const response = await result.response;
       const text = response.text();
-      setStory(text);
+
+      const [background, solution] = text.split('**Solutions:**');
+
+      setStory({ background, solution });
 
       setStoryStatus('success');
     } catch (err) {
       setStoryStatus('error');
     }
+  }
+
+  function handleSetPath(value) {
+    setPath(value);
+  }
+
+  function handleSubmitPath(event) {
+    event.preventDefault();
+
+    const nextScreen = screen + 1;
+    setScreen(nextScreen);
   }
 
   return (
@@ -127,8 +147,14 @@ export default function Home() {
         <SliderScreen fear={fear} handleSubmitRating={handleSubmitRating} />
       )}
       {screen === 3 && (
-        <BackgroundScreen story={story} storyStatus={storyStatus} />
+        <BackgroundScreen
+          story={story}
+          storyStatus={storyStatus}
+          handleSetPath={handleSetPath}
+          handleSubmitPath={handleSubmitPath}
+        />
       )}
+      {screen == 4 && <PathScreen path={path} story={story} />}
       {/* <form onSubmit={handleSubmit}>
         <button>Generate image</button>
       </form>
