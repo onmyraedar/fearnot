@@ -2,9 +2,10 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 import FearScreen from './components/FearScreen';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import SliderScreen from './components/SliderScreen';
 
 const ENDPOINT = '/api/image';
 const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
@@ -16,6 +17,9 @@ export default function Home() {
 
   const [imageURI, setImageURI] = React.useState(null);
   const [story, setStory] = React.useState('');
+
+  const [fear, setFear] = React.useState('');
+  const [screen, setScreen] = React.useState(1);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -45,8 +49,17 @@ export default function Home() {
     try {
       const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
-      const prompt =
-        'Give me some facts to help me get over my fear of spiders.';
+      const prompt = `Generate a personalized response in the form of a paragraph about a fear that I state alongside a fear scale that ranges from 1 to 10. The response text should be split into two different paragraph. The first paragraph and the second paragraph length must each be below 150 words detailing the general background and justification of the specific fear while taking into account the fear scale. The second paragraph must have the title or heading "solution" which details the potential coping mechanisms and solutions to the fear.
+
+        Paragraph format should be as follows
+        
+        Paragraph 1 - "Background:" Response text
+        
+        Paragraph 2 - "Solutions:" Response text
+        
+        Fear: Snakes
+        
+        Fear Scale: 2`;
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
@@ -59,10 +72,23 @@ export default function Home() {
     }
   }
 
+  function handleSubmitFear(event) {
+    event.preventDefault();
+
+    console.log({ fear: event.target[0].value });
+    setFear(event.target[0].value);
+    
+    const nextScreen = screen + 1;
+    setScreen(nextScreen);
+
+  }
+
   return (
     <main>
-      <FearScreen />
-      <form onSubmit={handleSubmit}>
+      <button onClick={() => setScreen(1)}>Return home</button>
+      {screen === 1 && <FearScreen handleSubmitFear={handleSubmitFear} />}
+      {screen === 2 && <SliderScreen fear={fear} />}
+      {/* <form onSubmit={handleSubmit}>
         <button>Generate image</button>
       </form>
       {imageStatus}
@@ -82,7 +108,7 @@ export default function Home() {
       </form>
       {storyStatus}
       <br />
-      {story}
+      {story} */}
     </main>
   );
 }

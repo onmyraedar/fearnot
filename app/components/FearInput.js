@@ -2,26 +2,23 @@
 
 import React from 'react';
 
-export default function FearInput() {
+export default function FearInput({ handleSubmitFear }) {
   let inputId = React.useId();
-  const [fear, setFear] = React.useState('');
-
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    console.log({ fear });
-  }
+  const [inputValue, setInputValue] = React.useState('');
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor={inputId}>Enter your fear:</label>
+    <form onSubmit={handleSubmitFear}>
+      <label htmlFor={inputId}>Enter your fear:</label><br />
       <input
         id={inputId}
         required={true}
         placeholder="Spiders"
-        value={fear}
-        onChange={(event) => setFear(event.target.value)}
+        value={inputValue}
+        onChange={(event) => setInputValue(event.target.value)}
       ></input>
+      <button type="submit">
+        Continue
+      </button>
     </form>
   );
 }
