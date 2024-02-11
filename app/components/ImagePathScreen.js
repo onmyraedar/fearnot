@@ -5,17 +5,28 @@ export default function ImagePathScreen({
   imagePrompt,
   imageGenStatus,
   imageURI,
+  handleSetPath,
 }) {
   return (
     <>
       <p>{imageGenStatus}</p>
       {imageGenStatus === 'success' && (
-        <Image
-          src={`data:image/jpeg;base64,${imageURI}`}
-          width={1024}
-          height={1024}
-          alt={imagePrompt}
-        />
+        <>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              handleSetPath('solution');
+            }}
+          >
+            <button type="submit">I want solutions</button>
+          </form>
+          <Image
+            src={`data:image/jpeg;base64,${imageURI}`}
+            width={1024}
+            height={1024}
+            alt={imagePrompt}
+          />
+        </>
       )}
     </>
   );
