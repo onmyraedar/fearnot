@@ -1,7 +1,6 @@
 import Image from 'next/image';
 
 import LoadingBar from './LoadingBar';
-import autoprefixer from 'autoprefixer';
 
 export default function ImagePathScreen({
   imagePrompt,
