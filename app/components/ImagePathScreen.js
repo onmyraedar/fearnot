@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import LoadingBar from './LoadingBar';
+import autoprefixer from 'autoprefixer';
 
 export default function ImagePathScreen({
   imagePrompt,
@@ -24,8 +25,9 @@ export default function ImagePathScreen({
           </form>
           <Image
             src={`data:image/jpeg;base64,${imageURI}`}
-            width={1024}
-            height={1024}
+            width={720}
+            height={720}
+            style={{height: "auto", maxWidth: "100vw"}}
             alt={imagePrompt}
           />
         </>
