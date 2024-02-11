@@ -8,11 +8,11 @@ app = FastAPI()
 def hello_world():
     return {"message": "Hello World"}
 
-@app.get("/api/image")
-def get_image():
+@app.post("/api/image")
+async def get_image(image_prompt: dict) -> dict:
     url = 'https://f1af-72-80-0-127.ngrok-free.app/sdapi/v1/txt2img'
     payload = {
-        "prompt": "a detailed puppy dog",
+        "prompt": image_prompt["prompt"],
         "steps": 20,
         "height": 1024,
         "width": 1024
