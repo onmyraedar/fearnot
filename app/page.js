@@ -8,6 +8,7 @@ import SliderScreen from './components/SliderScreen';
 import BackgroundScreen from './components/BackgroundScreen';
 import ImagePathScreen from './components/ImagePathScreen';
 import SolutionPathScreen from './components/SolutionPathScreen';
+import ThankYouScreen from './components/ThankYouScreen';
 
 const ENDPOINT = '/api/image';
 const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
@@ -84,7 +85,7 @@ export default function Home() {
 
       const result2 = await model.generateContent(prompt2);
       const response2 = await result2.response;
-      const text2 = response2.text();
+      const text2 = response2.text().replace('Prompt:', '');
 
       console.log({ background, solution });
       console.log({ prompt: text2 });
@@ -133,6 +134,11 @@ export default function Home() {
     }
   }
 
+  function goToNextScreen() {
+    const nextScreen = screen + 1;
+    setScreen(nextScreen);
+  }
+
   return (
     <main>
       <button onClick={() => setScreen(1)}>Return home</button>
@@ -162,11 +168,17 @@ export default function Home() {
           imagePrompt={imagePrompt}
           imageGenStatus={imageGenStatus}
           imageURI={imageURI}
+          handleSetPath={handleSetPath}
         />
       )}
       {screen === 4 && path === 'solution' && (
-        <SolutionPathScreen path={path} story={story} />
+        <SolutionPathScreen
+          path={path}
+          story={story}
+          goToNextScreen={goToNextScreen}
+        />
       )}
+      {screen === 5 && <ThankYouScreen />}
     </main>
   );
 }
