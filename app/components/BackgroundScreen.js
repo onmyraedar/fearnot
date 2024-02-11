@@ -1,6 +1,8 @@
 import React from 'react';
 import Markdown from 'react-markdown';
 
+import LoadingBar from './LoadingBar';
+
 export default function BackgroundScreen({
   story,
   storyStatus,
@@ -9,7 +11,8 @@ export default function BackgroundScreen({
 }) {
   return (
     <>
-      <p>{storyStatus}</p>
+      {storyStatus === 'loading' && <LoadingBar />}
+      {storyStatus === 'error' && <p>Sorry, something went wrong.</p>}
       {storyStatus === 'success' && (
         <>
           <Markdown>{story.background}</Markdown>

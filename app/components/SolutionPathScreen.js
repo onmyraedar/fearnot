@@ -1,10 +1,10 @@
 import Markdown from 'react-markdown';
 
-export default function SolutionPathScreen({ path, story, goToNextScreen }) {
+export default function SolutionPathScreen({ story, goToNextScreen }) {
 
   return (
     <>
-      <p>{path} path</p>
+      <h1>Solutions</h1>
       <Markdown>{story.solution}</Markdown>
       <form onSubmit={(event) => {
         event.preventDefault();

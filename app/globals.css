@@ -41,3 +41,13 @@ button, input {
   font-family: inherit;
   font-size: calc(10px + 2vmin);
 }
+
+button {
+  display: block;
+  margin-top: 1.3em;
+  border: 3px solid #303333;
+  border-radius: 18px;
+  padding: 0.5em 2em;
+  background-color: #303333;
+  color: whitesmoke;
+}

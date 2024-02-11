@@ -10,6 +10,8 @@ import ImagePathScreen from './components/ImagePathScreen';
 import SolutionPathScreen from './components/SolutionPathScreen';
 import ThankYouScreen from './components/ThankYouScreen';
 
+import styles from './styles/page.module.css';
+
 const ENDPOINT = '/api/image';
 const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
 
@@ -141,15 +143,13 @@ export default function Home() {
 
   return (
     <main>
-      <button onClick={() => setScreen(1)}>Return home</button>
-      <button
-        onClick={() => {
-          const previousScreen = screen - 1;
-          setScreen(previousScreen);
-        }}
-      >
-        Go back
-      </button>
+      {screen !== 1 &&
+        storyStatus !== 'loading' &&
+        imageGenStatus !== 'loading' && (
+          <button className={styles.button} onClick={() => setScreen(1)}>
+            Home
+          </button>
+        )}
       {screen === 1 && <FearScreen handleSubmitFear={handleSubmitFear} />}
       {screen === 2 && (
         <SliderScreen fear={fear} handleSubmitRating={handleSubmitRating} />
@@ -164,7 +164,6 @@ export default function Home() {
       )}
       {screen === 4 && path === 'image' && (
         <ImagePathScreen
-          path={path}
           imagePrompt={imagePrompt}
           imageGenStatus={imageGenStatus}
           imageURI={imageURI}
@@ -173,7 +172,6 @@ export default function Home() {
       )}
       {screen === 4 && path === 'solution' && (
         <SolutionPathScreen
-          path={path}
           story={story}
           goToNextScreen={goToNextScreen}
         />

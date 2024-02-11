@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+import styles from '../styles/SliderScreen.module.css';
+
 export default function SliderScreen({ fear, handleSubmitRating }) {
   let inputId = React.useId();
   const [inputValue, setInputValue] = React.useState(1);
@@ -21,7 +23,7 @@ export default function SliderScreen({ fear, handleSubmitRating }) {
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
         ></input>
-        <button type="submit">
+        <button className={styles.button} type="submit">
           Continue
         </button>
       </form>

@@ -1,3 +1,3 @@
 export default function ThankYouScreen() {
-  return <p>Thank you!</p>
+  return <h2>Thank you!</h2>
 }

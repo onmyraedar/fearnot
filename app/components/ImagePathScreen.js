@@ -1,7 +1,8 @@
 import Image from 'next/image';
 
+import LoadingBar from './LoadingBar';
+
 export default function ImagePathScreen({
-  path,
   imagePrompt,
   imageGenStatus,
   imageURI,
@@ -9,7 +10,8 @@ export default function ImagePathScreen({
 }) {
   return (
     <>
-      <p>{imageGenStatus}</p>
+      {imageGenStatus === 'loading' && <LoadingBar />}
+      {imageGenStatus === 'error' && <p>Sorry, something went wrong.</p>}
       {imageGenStatus === 'success' && (
         <>
           <form
